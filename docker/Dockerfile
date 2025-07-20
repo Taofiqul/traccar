@@ -1,13 +1,20 @@
-FROM openjdk:17-jdk-slim
+FROM eclipse-temurin:17-jdk
 
-WORKDIR /opt/traccar
+ENV DEBIAN_FRONTEND=noninteractive
 
-RUN apt-get update && apt-get install -y wget unzip && rm -rf /var/lib/apt/lists/*
+# Install unzip & wget
+RUN apt-get update && apt-get install -y unzip wget && apt-get clean
 
-RUN wget https://github.com/traccar/traccar/releases/download/v6.8.1/traccar-other-6.8.1.zip -O /tmp/traccar.zip && \
+# Create install directory
+RUN mkdir -p /opt/traccar
+
+# Download and extract Traccar "other" version (for Linux)
+RUN wget https://github.com/traccar/traccar/releases/latest/download/traccar-other.zip -O /tmp/traccar.zip && \
     unzip -qo /tmp/traccar.zip -d /opt/traccar && \
     rm /tmp/traccar.zip
-RUN chmod +x /opt/traccar/traccar.run
+
+# Expose default Traccar port
 EXPOSE 8082
 
-CMD ["./traccar.run"]
+# Run Traccar
+CMD ["/opt/traccar/bin/traccar", "start"]
