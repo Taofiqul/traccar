@@ -1,7 +1,8 @@
 FROM alpine AS package
 ARG VERSION
-RUN unzip -qo /tmp/traccar.zip -d /traccar
-
+RUN wget https://github.com/traccar/traccar/releases/latest/download/traccar-other.zip -O /tmp/traccar.zip && \
+    unzip -qo /tmp/traccar.zip -d /traccar && \
+    rm /tmp/traccar.zip
 FROM eclipse-temurin:21 AS jdk
 RUN jlink --module-path $JAVA_HOME/jmods \
     --add-modules java.se,jdk.charsets,jdk.crypto.ec,jdk.unsupported \
