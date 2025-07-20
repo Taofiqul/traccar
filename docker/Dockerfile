@@ -1,6 +1,5 @@
 FROM alpine AS package
 ARG VERSION
-COPY installers/traccar-other-$VERSION.zip /tmp/traccar.zip
 RUN unzip -qo /tmp/traccar.zip -d /traccar
 
 FROM eclipse-temurin:21 AS jdk
